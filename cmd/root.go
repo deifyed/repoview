@@ -38,7 +38,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.repoview.yaml)")
-	rootCmd.PersistentFlags().String("storage", "", "path to storage file")
+	rootCmd.PersistentFlags().String("storage-path", "", "path to storage file")
 	viper.BindPFlag("storage.path", rootCmd.PersistentFlags().Lookup("storage"))
 
 	// Set default values
