@@ -25,7 +25,7 @@ func (s *Storage) load() error {
 }
 
 func (s *Storage) commit() error {
-	if err := s.ensureStorageExists(); err != nil {
+	if err := s.ensureStorageDirectoryExists(); err != nil {
 		return fmt.Errorf("ensuring storage exists: %w", err)
 	}
 
@@ -45,20 +45,43 @@ func (s *Storage) commit() error {
 	return nil
 }
 
+func (s *Storage) ensureStorageDirectoryExists() error {
+	directory := filepath.Dir(s.absoluteStoragePath)
+
+	_, err := s.Fs.Stat(directory)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("checking storage directory: %w", err)
+		}
+
+		if err := s.Fs.MkdirAll(directory, 0755); err != nil {
+			return fmt.Errorf("creating storage directory: %w", err)
+		}
+	}
+
+	return nil
+}
+
 func (s *Storage) ensureStorageExists() error {
 	if err := s.ensureAbsoluteStoragePath(); err != nil {
 		return fmt.Errorf("ensuring absolute storage path: %w", err)
 	}
 
-	if _, err := s.Fs.Stat(s.absoluteStoragePath); os.IsNotExist(err) {
-		if err := s.Fs.MkdirAll(filepath.Dir(s.absoluteStoragePath), 0755); err != nil {
-			return fmt.Errorf("creating storage directory: %w", err)
+	if err := s.ensureStorageDirectoryExists(); err != nil {
+		return fmt.Errorf("ensuring storage directory exists: %w", err)
+	}
+
+	_, err := s.Fs.Stat(s.absoluteStoragePath)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("checking storage: %w", err)
 		}
 
 		if err := s.commit(); err != nil {
 			return fmt.Errorf("initializing storage: %w", err)
 		}
 	}
+
 	return nil
 }
 
