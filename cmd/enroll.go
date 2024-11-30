@@ -21,5 +21,12 @@ var (
 
 func init() {
 	enrollCmd.Flags().StringVarP(&enrollCmdOpts.StoragePath, "storage", "s", "", "path to storage file")
+	
+	enrollCmd.PreRun = func(cmd *cobra.Command, args []string) {
+		if enrollCmdOpts.StoragePath == "" {
+			enrollCmdOpts.StoragePath = viper.GetString("storage.path")
+		}
+	}
+
 	rootCmd.AddCommand(enrollCmd)
 }

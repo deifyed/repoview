@@ -21,5 +21,12 @@ var (
 
 func init() {
 	delistCmd.Flags().StringVarP(&delistCmdOpts.StoragePath, "storage", "s", "", "path to storage file")
+	
+	delistCmd.PreRun = func(cmd *cobra.Command, args []string) {
+		if delistCmdOpts.StoragePath == "" {
+			delistCmdOpts.StoragePath = viper.GetString("storage.path")
+		}
+	}
+
 	rootCmd.AddCommand(delistCmd)
 }
