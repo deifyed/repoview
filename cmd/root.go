@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/adrg/xdg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -28,15 +30,13 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.repoview.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $XDG_CONFIG_HOME/repoview/config.yaml)")
 	rootCmd.PersistentFlags().String("storage-path", "", "path to storage file")
 	viper.BindPFlag("storage.path", rootCmd.PersistentFlags().Lookup("storage"))
 
 	// Set default values
-	home, err := os.UserHomeDir()
-	cobra.CheckErr(err)
-
-	viper.SetDefault("storage.path", fmt.Sprintf("%s/.repoview/storage", home))
+	defaultStoragePath := filepath.Join(xdg.DataHome, "repoview", "storage.json")
+	viper.SetDefault("storage.path", defaultStoragePath)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -45,14 +45,16 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+		// Use XDG config directory
+		configDir := filepath.Join(xdg.ConfigHome, "repoview")
+		if err := os.MkdirAll(configDir, 0755); err != nil {
+			cobra.CheckErr(err)
+		}
 
-		// Search config in home directory with name ".repoview" (without extension).
-		viper.AddConfigPath(home)
+		// Search config in XDG config directory
+		viper.AddConfigPath(configDir)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".repoview")
+		viper.SetConfigName("config")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
