@@ -4,6 +4,7 @@ import (
 	"github.com/deifyed/repoview/cmd/delist"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
