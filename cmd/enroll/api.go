@@ -11,7 +11,8 @@ import (
 )
 
 type EnrollOptions struct {
-	Fs *afero.Afero
+	Fs          *afero.Afero
+	StoragePath string
 }
 
 func RunE(opts *EnrollOptions) func(cmd *cobra.Command, args []string) error {
@@ -27,7 +28,7 @@ func RunE(opts *EnrollOptions) func(cmd *cobra.Command, args []string) error {
 
 		storage := &jsonfile.Storage{
 			Fs:          opts.Fs,
-			StoragePath: "/tmp/repoview.json",
+			StoragePath: opts.StoragePath,
 		}
 
 		err = enroll(storage, targetPath)

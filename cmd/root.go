@@ -42,8 +42,8 @@ func init() {
 	// Set default values
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
-	
-	viper.SetDefault("storage.path", fmt.Sprintf("%s/.repoview/storage.json", home))
+
+	viper.SetDefault("storage.path", fmt.Sprintf("%s/.repoview/storage", home))
 }
 
 // initConfig reads in config file and ENV variables if set.
