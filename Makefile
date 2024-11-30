@@ -1,9 +1,8 @@
 # Binary name
-BINARY=git-track
+BINARY=repoview
 
 # Installation paths
-PREFIX ?= ${HOME}/.local
-INSTALL_PATH = $(PREFIX)/bin
+PREFIX ?= ${HOME}/.local/bin
 
 # Go related variables
 GOBASE=$(shell pwd)
@@ -24,15 +23,15 @@ clean:
 # Install target
 .PHONY: install
 install: build
-	@echo "Installing to $(INSTALL_PATH)..."
-	@mkdir -p $(INSTALL_PATH)
-	@cp $(GOBIN)/$(BINARY) $(INSTALL_PATH)/$(BINARY)
+	@echo "Installing to $(PREFIX)..."
+	@mkdir -p $(PREFIX)
+	@cp $(GOBIN)/$(BINARY) $(PREFIX)/$(BINARY)
 
 # Uninstall target
 .PHONY: uninstall
 uninstall:
-	@echo "Uninstalling from $(INSTALL_PATH)..."
-	@rm -f $(INSTALL_PATH)/$(BINARY)
+	@echo "Uninstalling from $(PREFIX)..."
+	@rm -f $(PREFIX)/$(BINARY)
 
 # Test target
 .PHONY: test
