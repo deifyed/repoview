@@ -31,3 +31,17 @@ func (s *Storage) ListRepositoryPaths() ([]string, error) {
 
 	return paths, nil
 }
+
+func (s *Storage) RemoveRepositoryPath(path string) error {
+	if err := s.load(); err != nil {
+		return fmt.Errorf("loading storage: %w", err)
+	}
+
+	delete(s.records, path)
+
+	if err := s.commit(); err != nil {
+		return fmt.Errorf("committing storage: %w", err)
+	}
+
+	return nil
+}
