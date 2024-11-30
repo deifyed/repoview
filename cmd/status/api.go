@@ -6,12 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type StatusOptions struct {
+type Options struct {
 	Fs          *afero.Afero
 	StoragePath string
 }
 
-func RunE(opts *StatusOptions) func(cmd *cobra.Command, args []string) error {
+func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		_ = &jsonfile.Storage{
 			Fs:          opts.Fs,

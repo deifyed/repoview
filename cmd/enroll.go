@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	enrollCmdOpts = enroll.EnrollOptions{
+	enrollCmdOpts = enroll.Options{
 		Fs: &afero.Afero{Fs: afero.NewOsFs()},
 	}
 	// enrollCmd represents the enroll command

@@ -7,7 +7,7 @@ import (
 
 // statusCmd represents the status command
 var (
-	statusCmdOpts = status.StatusOptions{}
+	statusCmdOpts = status.Options{}
 	statusCmd     = &cobra.Command{
 		Use:   "status",
 		Short: "Show repository status for all enrolled repositories",

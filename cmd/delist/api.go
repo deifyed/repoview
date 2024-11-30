@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type DelistOptions struct {
+type Options struct {
 	Fs          *afero.Afero
 	StoragePath string
 }
 
-func RunE(opts *DelistOptions) func(cmd *cobra.Command, args []string) error {
+func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		targetPath, err := filepath.Abs(args[0])
 		if err != nil {

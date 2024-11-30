@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	delistCmdOpts = delist.DelistOptions{
+	delistCmdOpts = delist.Options{
 		Fs: &afero.Afero{Fs: afero.NewOsFs()},
 	}
 	// delistCmd represents the delist command
