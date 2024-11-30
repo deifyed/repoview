@@ -1,4 +1,4 @@
-package enroll
+package delist
 
 import (
 	"fmt"
@@ -10,11 +10,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type EnrollOptions struct {
+type DelistOptions struct {
 	Fs *afero.Afero
 }
 
-func RunE(opts *EnrollOptions) func(cmd *cobra.Command, args []string) error {
+func RunE(opts *DelistOptions) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		targetPath, err := filepath.Abs(args[0])
 		if err != nil {
@@ -30,7 +30,7 @@ func RunE(opts *EnrollOptions) func(cmd *cobra.Command, args []string) error {
 			StoragePath: "/tmp/repoview.json",
 		}
 
-		err = enroll(storage, targetPath)
+		err = delist(storage, targetPath)
 		if err != nil {
 			return fmt.Errorf("enrolling: %w", err)
 		}

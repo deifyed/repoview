@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"github.com/deifyed/repoview/cmd/enroll"
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 )
 
 var (
-	enrollCmdOpts = enroll.EnrollOptions{}
+	enrollCmdOpts = enroll.EnrollOptions{
+		Fs: &afero.Afero{Fs: afero.NewOsFs()},
+	}
 	// enrollCmd represents the enroll command
 	enrollCmd = &cobra.Command{
 		Use:   "enroll",
