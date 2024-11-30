@@ -10,7 +10,7 @@ var (
 	delistCmdOpts = delist.DelistOptions{
 		Fs: &afero.Afero{Fs: afero.NewOsFs()},
 	}
-	// enrollCmd represents the enroll command
+	// delistCmd represents the delist command
 	delistCmd = &cobra.Command{
 		Use:   "delist",
 		Short: "Remove a repository from the list of repositories to be monitored",
@@ -20,5 +20,6 @@ var (
 )
 
 func init() {
+	delistCmd.Flags().StringVarP(&delistCmdOpts.StoragePath, "storage", "s", "", "path to storage file")
 	rootCmd.AddCommand(delistCmd)
 }

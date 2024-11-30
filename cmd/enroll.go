@@ -10,7 +10,7 @@ var (
 	enrollCmdOpts = enroll.EnrollOptions{
 		Fs: &afero.Afero{Fs: afero.NewOsFs()},
 	}
-	// enrollCmd represents the enroll command
+	// enrollCmd represents the enroll command 
 	enrollCmd = &cobra.Command{
 		Use:   "enroll",
 		Short: "Add a new repository to the list of repositories to be monitored",
@@ -20,5 +20,6 @@ var (
 )
 
 func init() {
+	enrollCmd.Flags().StringVarP(&enrollCmdOpts.StoragePath, "storage", "s", "", "path to storage file")
 	rootCmd.AddCommand(enrollCmd)
 }
