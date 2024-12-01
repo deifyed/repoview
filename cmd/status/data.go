@@ -1,6 +1,8 @@
 package status
 
-import "github.com/deifyed/repoview/pkg/core"
+import (
+	"github.com/deifyed/repoview/pkg/core"
+)
 
 type repositoryStatus struct {
 	MachineURI string
@@ -12,8 +14,6 @@ type statusFetcher interface {
 }
 
 func getAllStatusesForRepository(remote statusFetcher, repositoryURI string) ([]repositoryStatus, error) {
-	var statuses []repositoryStatus
-
 	remoteStatuses, err := remote.GetRepositoryStatuses()
 	if err != nil {
 		return nil, err
@@ -30,5 +30,5 @@ func getAllStatusesForRepository(remote statusFetcher, repositoryURI string) ([]
 		}
 	}
 
-	return statuses, nil
+	return relevantStatuses, nil
 }

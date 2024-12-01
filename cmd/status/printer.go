@@ -23,6 +23,8 @@ func printRepository(out io.Writer, uri string, status string) error {
 	return nil
 }
 
+const indent = "    "
+
 func printStatusesForRepository(out io.Writer, uri string, machines []repositoryStatus) error {
 	fmt.Fprint(out, strings.Trim(uri, "\n"))
 
@@ -33,15 +35,15 @@ func printStatusesForRepository(out io.Writer, uri string, machines []repository
 	}
 
 	for _, machine := range machines {
-		fmt.Fprintf(out, "\t%s", strings.Trim(machine.MachineURI, "\n"))
+		fmt.Fprintf(out, "\n%s%s", indent, strings.Trim(machine.MachineURI, "\n"))
 
 		if machine.Status == "" {
 			fmt.Fprint(out, " ⭐\n")
 		} else {
-			indented := strings.ReplaceAll(machine.Status, "\n", "\n\t")
+			indented := strings.ReplaceAll(machine.Status, "\n", "\n"+indent+indent)
 			trimmed := strings.TrimSuffix(indented, "\n")
 
-			fmt.Fprintf(out, "\n\t%s\n", trimmed)
+			fmt.Fprintf(out, "\n%s%s\n", indent+indent, trimmed)
 		}
 
 	}

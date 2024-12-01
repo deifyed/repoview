@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 func GetRepositoryStatus(path string) (string, error) {
@@ -34,5 +35,5 @@ func GetRepositoryURI(path string) (string, error) {
 
 	uri := removeScheme(stdout.String())
 
-	return uri, err
+	return strings.Trim(uri, "\n"), err
 }
