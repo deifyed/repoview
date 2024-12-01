@@ -7,18 +7,15 @@ import (
 	"github.com/spf13/afero"
 )
 
-const (
-	statusFileName = "repoview.json"
-)
-
 type Remote struct {
-	Fs            *afero.Afero
-	RepositoryURI string
+	Fs                   *afero.Afero
+	RepositoryURI        string
+	RelativeDataFilePath string
 }
 
 // TODO: RepositoryStatus can contain a MachineURI now, maybe this is not the best place to fetch that info
 func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error {
-	info, err := generateLocalInfo(r.Fs, r.RepositoryURI)
+	info, err := generateLocalInfo(r.Fs, r.RepositoryURI, r.RelativeDataFilePath)
 	if err != nil {
 		return fmt.Errorf("generating local info: %w", err)
 	}
@@ -59,7 +56,7 @@ func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error 
 }
 
 func (r *Remote) GetRepositoryStatuses() ([]core.RepositoryStatus, error) {
-	info, err := generateLocalInfo(r.Fs, r.RepositoryURI)
+	info, err := generateLocalInfo(r.Fs, r.RepositoryURI, r.RelativeDataFilePath)
 	if err != nil {
 		return nil, fmt.Errorf("generating local info: %w", err)
 	}

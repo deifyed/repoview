@@ -13,12 +13,13 @@ import (
 type Options struct {
 	Fs          *afero.Afero
 	StoragePath string
+
+	RemoteDataRepositoryURI string
+	RemoteDataFilePath      string
 }
 
 func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		remotedataRepositoryURI := "github.com/deifyed/repoview"
-
 		targetPath, err := os.Getwd()
 		if err != nil {
 			return fmt.Errorf("getting current working directory: %w", err)
@@ -34,8 +35,9 @@ func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 		}
 
 		remote := remotedata.Remote{
-			Fs:            opts.Fs,
-			RepositoryURI: remotedataRepositoryURI,
+			Fs:                   opts.Fs,
+			RepositoryURI:        opts.RemoteDataRepositoryURI,
+			RelativeDataFilePath: opts.RemoteDataFilePath,
 		}
 
 		remoteStatuses, err := getAllStatusesForRepository(&remote, repositoryURI)

@@ -16,7 +16,7 @@ type localInfo struct {
 	DataFilePath   string
 }
 
-func generateLocalInfo(fs *afero.Afero, repositoryURI string) (*localInfo, error) {
+func generateLocalInfo(fs *afero.Afero, repositoryURI string, relativeDataFilePath string) (*localInfo, error) {
 	repositoryName := filepath.Base(repositoryURI)
 
 	localHostname, err := os.Hostname()
@@ -34,7 +34,7 @@ func generateLocalInfo(fs *afero.Afero, repositoryURI string) (*localInfo, error
 		return nil, fmt.Errorf("creating temporary directory: %w", err)
 	}
 
-	dataFilePath := filepath.Join(repositoryPath, statusFileName)
+	dataFilePath := filepath.Join(repositoryPath, relativeDataFilePath)
 
 	return &localInfo{
 		Hostname:       localHostname,
