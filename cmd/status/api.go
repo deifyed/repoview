@@ -38,7 +38,13 @@ func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 				return fmt.Errorf("getting repository URI: %w", err)
 			}
 
-			fmt.Fprintf(cmd.OutOrStdout(), "%s\t%s", uri, format(status))
+			fmt.Fprint(cmd.OutOrStdout(), strings.Trim(uri, "\n"))
+
+			if status == "" {
+				fmt.Fprint(cmd.OutOrStdout(), " ⭐\n")
+			} else {
+				fmt.Fprint(cmd.OutOrStdout(), format(status))
+			}
 		}
 
 		return nil
@@ -48,5 +54,5 @@ func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 func format(status string) string {
 	indented := strings.ReplaceAll(status, "\n", "\n\t")
 
-	return strings.TrimSuffix(indented, "\n") + "\n"
+	return "\n\t" + strings.TrimSuffix(indented, "\n") + "\n"
 }
