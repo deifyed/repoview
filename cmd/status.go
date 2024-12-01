@@ -15,6 +15,7 @@ var (
 	statusCmd = &cobra.Command{
 		Use:   "status",
 		Short: "Show repository status for all enrolled repositories",
+		Args:  cobra.MaximumNArgs(1),
 		RunE:  status.RunE(&statusCmdOpts),
 	}
 )

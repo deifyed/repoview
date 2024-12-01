@@ -16,6 +16,7 @@ type Remote struct {
 	RepositoryURI string
 }
 
+// TODO: RepositoryStatus can contain a MachineURI now, maybe this is not the best place to fetch that info
 func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error {
 	info, err := generateLocalInfo(r.Fs, r.RepositoryURI)
 	if err != nil {
@@ -55,4 +56,35 @@ func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error 
 	}
 
 	return nil
+}
+
+func (r *Remote) GetRepositoryStatuses() ([]core.RepositoryStatus, error) {
+	info, err := generateLocalInfo(r.Fs, r.RepositoryURI)
+	if err != nil {
+		return nil, fmt.Errorf("generating local info: %w", err)
+	}
+
+	err = clone(r.RepositoryURI, info.RepositoryPath)
+	if err != nil {
+		return nil, fmt.Errorf("cloning repository: %w", err)
+	}
+
+	existingData, err := readData(r.Fs, info.DataFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("loading data: %w", err)
+	}
+
+	var statuses = make([]core.RepositoryStatus, 0)
+
+	for repositoryURI, repository := range existingData {
+		for machineURI, status := range repository.Statuses {
+			statuses = append(statuses, core.RepositoryStatus{
+				RepsitoryURI: repositoryURI,
+				MachineURI:   machineURI,
+				Status:       status,
+			})
+		}
+	}
+
+	return statuses, nil
 }

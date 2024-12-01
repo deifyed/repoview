@@ -12,7 +12,7 @@ import (
 {
   "github.com/deifyed/repoview": {
     statuses: {
-      "depth/julius": "a\nb\nc"
+      "localhost/user": "a\nb\nc"
     },
   }
 }
