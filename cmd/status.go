@@ -22,7 +22,7 @@ var (
 
 func init() {
 	statusCmd.Flags().String("remote-storage-uri", "", "remote git repository URI")
-	viper.BindPFlag(viperGitRemoteURI, rootCmd.Flags().Lookup("remote-storage-uri"))
+	viper.BindPFlag(viperGitRemoteURI, statusCmd.Flags().Lookup("remote-storage-uri"))
 
 	statusCmd.Flags().String("remote-storage-relative-data-file-path", "", "relative path to data file in remote git repository")
 	viper.BindPFlag(viperGitRemoteRelativeDataFilePath, statusCmd.Flags().Lookup("remote-storage-relative-data-file-path"))

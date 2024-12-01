@@ -12,6 +12,9 @@ import (
 type Options struct {
 	Fs          *afero.Afero
 	StoragePath string
+
+	RemoteDataRepositoryURI string
+	RemoteDataFilePath      string
 }
 
 func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
@@ -21,7 +24,11 @@ func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 			StoragePath: opts.StoragePath,
 		}
 
-		remote := &git.Remote{}
+		remote := &git.Remote{
+			Fs:                   opts.Fs,
+			RepositoryURI:        opts.RemoteDataRepositoryURI,
+			RelativeDataFilePath: opts.RemoteDataFilePath,
+		}
 
 		err := push(storage, remote)
 		if err != nil {

@@ -21,11 +21,22 @@ func clone(repositoryURI string, repositoryPath string) error {
 }
 
 func commitFile(repositoryPath string, dataFilePath string, message string) error {
-	commitCmd := exec.Command("git", "-C", repositoryPath, "commit", "-m", message, dataFilePath)
+	var stderr bytes.Buffer
 
-	err := commitCmd.Run()
+	addCmd := exec.Command("git", "-C", repositoryPath, "add", dataFilePath)
+	addCmd.Stderr = &stderr
+
+	err := addCmd.Run()
 	if err != nil {
-		return fmt.Errorf("running git commit: %w", err)
+		return fmt.Errorf("running git commit: %w: %s", err, stderr.String())
+	}
+
+	commitCmd := exec.Command("git", "-C", repositoryPath, "commit", "-m", message, dataFilePath)
+	commitCmd.Stderr = &stderr
+
+	err = commitCmd.Run()
+	if err != nil {
+		return fmt.Errorf("running git commit: %w: %s", err, stderr.String())
 	}
 
 	return nil

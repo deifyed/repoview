@@ -42,7 +42,7 @@ func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error 
 		return fmt.Errorf("writing data: %w", err)
 	}
 
-	err = commitFile(info.RepositoryPath, info.DataFilePath, "Updated status")
+	err = commitFile(info.RepositoryPath, r.RelativeDataFilePath, "Updated status")
 	if err != nil {
 		return fmt.Errorf("adding and committing: %w", err)
 	}
