@@ -19,8 +19,11 @@ repoview status
 
 ## Install
 
+Install the binary into `${HOME}/.local/bin` by default. Make sure it's in your PATH. Alternatively choose location with
+`PREFIX`
+
 ```shell
-make build && make install # Installs the binary into ${HOME}/.local/bin by default. make sure its in your PATH
+make build && make install 
 ```
 
 ## Roadmap
