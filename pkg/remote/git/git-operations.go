@@ -1,6 +1,7 @@
 package git
 
 import (
+	"bytes"
 	"fmt"
 	"os/exec"
 )
@@ -8,9 +9,12 @@ import (
 func clone(repositoryURI string, repositoryPath string) error {
 	cmd := exec.Command("git", "clone", "--depth=1", repositoryURI, repositoryPath)
 
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+
 	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("running git clone: %w", err)
+		return fmt.Errorf("running git clone: %w: %s", err, stderr.String())
 	}
 
 	return nil

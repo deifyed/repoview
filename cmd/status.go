@@ -21,9 +21,23 @@ var (
 )
 
 func init() {
+	statusCmd.Flags().String("remote-storage-uri", "", "remote git repository URI")
+	viper.BindPFlag(viperGitRemoteURI, rootCmd.Flags().Lookup("remote-storage-uri"))
+
+	statusCmd.Flags().String("remote-storage-relative-data-file-path", "", "relative path to data file in remote git repository")
+	viper.BindPFlag(viperGitRemoteRelativeDataFilePath, statusCmd.Flags().Lookup("remote-storage-relative-data-file-path"))
+	viper.SetDefault(viperGitRemoteRelativeDataFilePath, "repoview.json")
+
 	statusCmd.PreRun = func(cmd *cobra.Command, args []string) {
 		statusCmdOpts.StoragePath = viper.GetString("storage.path")
+		statusCmdOpts.RemoteDataRepositoryURI = viper.GetString(viperGitRemoteURI)
+		statusCmdOpts.RemoteDataFilePath = viper.GetString(viperGitRemoteRelativeDataFilePath)
 	}
 
 	rootCmd.AddCommand(statusCmd)
 }
+
+const (
+	viperGitRemoteURI                  = "GitRemote.URI"
+	viperGitRemoteRelativeDataFilePath = "GitRemote.RelativeDataFilePath"
+)

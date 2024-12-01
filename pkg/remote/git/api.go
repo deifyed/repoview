@@ -15,7 +15,7 @@ type Remote struct {
 
 // TODO: RepositoryStatus can contain a MachineURI now, maybe this is not the best place to fetch that info
 func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error {
-	info, err := generateLocalInfo(r.Fs, r.RepositoryURI, r.RelativeDataFilePath)
+	info, err := generateLocalInfo(r.Fs, r.RelativeDataFilePath)
 	if err != nil {
 		return fmt.Errorf("generating local info: %w", err)
 	}
@@ -56,7 +56,7 @@ func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error 
 }
 
 func (r *Remote) GetRepositoryStatuses() ([]core.RepositoryStatus, error) {
-	info, err := generateLocalInfo(r.Fs, r.RepositoryURI, r.RelativeDataFilePath)
+	info, err := generateLocalInfo(r.Fs, r.RelativeDataFilePath)
 	if err != nil {
 		return nil, fmt.Errorf("generating local info: %w", err)
 	}
