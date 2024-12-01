@@ -3,12 +3,22 @@ package git
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/spf13/afero"
 )
 
 func readData(fs *afero.Afero, targetFile string) (dataFile, error) {
 	data := make(dataFile)
+
+	_, err := fs.Stat(targetFile)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return data, fmt.Errorf("statting file: %w", err)
+		}
+
+		return data, nil
+	}
 
 	raw, err := fs.ReadFile(targetFile)
 	if err != nil {

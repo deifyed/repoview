@@ -26,6 +26,12 @@ func printRepository(out io.Writer, uri string, status string) error {
 func printStatusesForRepository(out io.Writer, uri string, machines []repositoryStatus) error {
 	fmt.Fprint(out, strings.Trim(uri, "\n"))
 
+	if len(machines) == 0 {
+		fmt.Fprint(out, ": no data found\n")
+
+		return nil
+	}
+
 	for _, machine := range machines {
 		fmt.Fprintf(out, "\t%s", strings.Trim(machine.MachineURI, "\n"))
 
