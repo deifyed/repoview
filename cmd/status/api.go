@@ -2,7 +2,6 @@ package status
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/deifyed/repoview/pkg/git"
 	"github.com/deifyed/repoview/pkg/storage/jsonfile"
@@ -38,21 +37,12 @@ func RunE(opts *Options) func(cmd *cobra.Command, args []string) error {
 				return fmt.Errorf("getting repository URI: %w", err)
 			}
 
-			fmt.Fprint(cmd.OutOrStdout(), strings.Trim(uri, "\n"))
-
-			if status == "" {
-				fmt.Fprint(cmd.OutOrStdout(), " ⭐\n")
-			} else {
-				fmt.Fprint(cmd.OutOrStdout(), format(status))
+			err = printRepository(cmd.OutOrStdout(), uri, status)
+			if err != nil {
+				return fmt.Errorf("printing repository: %w", err)
 			}
 		}
 
 		return nil
 	}
-}
-
-func format(status string) string {
-	indented := strings.ReplaceAll(status, "\n", "\n\t")
-
-	return "\n\t" + strings.TrimSuffix(indented, "\n") + "\n"
 }
