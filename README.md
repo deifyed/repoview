@@ -6,12 +6,20 @@ A tool to keep track of your repository statuses across multiple users and hosts
 
 ## Usage
 
+### Initial
+
+Create a repository for data. Point to that data in your `${HOME}/.config/repoview/config.yaml`. An example
+configuration file can be found [here](./docs/config.yaml).
+
+### Everyday usage
+
 ```shell
 # First, enroll a repository on all relevant users and systems
 repoview enroll .
 
 # Add and enable systemd unit to run repoview push on shutdown
 <TBA> # not yet implemented. well, the push command is, just not the unit file
+# in other words; find a neat place to put `repoview push`
 
 # Whenever you're in doubt, check the statuses of a repository
 repoview status
