@@ -1,5 +1,8 @@
 # repoview
 
+⚠⚠ Beware ⚠⚠
+This piece of software cannot be considered stable
+
 ## Description
 
 A tool to keep track of your repository statuses across multiple users and hosts.
