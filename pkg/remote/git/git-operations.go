@@ -21,32 +21,59 @@ func clone(repositoryURI string, repositoryPath string) error {
 }
 
 func commitFile(repositoryPath string, dataFilePath string, message string) error {
-	var stderr bytes.Buffer
-
-	addCmd := exec.Command("git", "-C", repositoryPath, "add", dataFilePath)
-	addCmd.Stderr = &stderr
-
-	err := addCmd.Run()
+	_, err := git(repositoryPath, "add", dataFilePath)
 	if err != nil {
-		return fmt.Errorf("running git commit: %w: %s", err, stderr.String())
+		return fmt.Errorf("adding: %w", err)
 	}
 
-	commitCmd := exec.Command("git", "-C", repositoryPath, "commit", "-m", message, dataFilePath)
-	commitCmd.Stderr = &stderr
-
-	err = commitCmd.Run()
+	_, err = git(repositoryPath, "commit", "-m", message, dataFilePath)
 	if err != nil {
-		return fmt.Errorf("running git commit: %w: %s", err, stderr.String())
+		return fmt.Errorf("comitting: %w", err)
 	}
 
 	return nil
 }
 
 func pushChanges(repositoryPath string) error {
-	cmd := exec.Command("git", "-C", repositoryPath, "push")
+	_, err := git(repositoryPath, "push")
+	if err != nil {
+		return fmt.Errorf("pushing: %w", err)
+	}
+
+	return nil
+}
+
+func isRepositoryClean(repositoryPath string) (bool, error) {
+	cmd := exec.Command("git", "-C", repositoryPath, "diff", "--quiet")
+
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+
 	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("running git push: %w", err)
+		if exiterr, ok := err.(*exec.ExitError); ok && exiterr.ExitCode() == 1 {
+			return false, nil
+		}
+
+		return false, fmt.Errorf("running git clone: %w: %s", err, stderr.String())
 	}
-	return nil
+
+	return true, nil
+}
+
+func git(repositoryPath string, args ...string) (string, error) {
+	cmd := exec.Command("git", append([]string{"-C", repositoryPath}, args...)...)
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		return "", fmt.Errorf("running git: %w: %s %s", err, stderr.String(), stdout.String())
+	}
+
+	return stdout.String(), nil
 }

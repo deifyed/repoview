@@ -42,6 +42,15 @@ func (r *Remote) UploadRepositoryStatus(statuses []core.RepositoryStatus) error 
 		return fmt.Errorf("writing data: %w", err)
 	}
 
+	clean, err := isRepositoryClean(info.RepositoryPath)
+	if err != nil {
+		return fmt.Errorf("checking if repository is clean: %w", err)
+	}
+
+	if clean {
+		return nil
+	}
+
 	err = commitFile(info.RepositoryPath, r.RelativeDataFilePath, "Updated status")
 	if err != nil {
 		return fmt.Errorf("adding and committing: %w", err)
