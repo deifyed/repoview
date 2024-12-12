@@ -21,8 +21,6 @@ configuration file can be found [here](./docs/config.yaml).
 repoview enroll .
 
 # Add and enable systemd unit to run repoview push on shutdown
-<TBA> # not yet implemented. well, the push command is, just not the unit file
-# in other words; find a neat place to put `repoview push`
 
 # Whenever you're in doubt, check the statuses of a repository
 repoview status
@@ -31,13 +29,20 @@ repoview status
 ## Install
 
 Install the binary into `${HOME}/.local/bin` by default. Make sure it's in your PATH. Alternatively choose location with
-`PREFIX`
+`PREFIX`. If PREFIX is used, make sure to use the same prefix when and if you are running `make install-service`
 
 ```shell
+# Build and install Repoview
 make build && make install 
+
+# (Optional) Install systemd service if you want automatic push on shutdown
+make install-service
+systemd --user enable repoview-push.service
 ```
+
+
 
 ## Roadmap
 
-- [ ] Unit file for auto pushes
+- [x] Unit file for auto pushes
 - [ ] ?? something about branch info, maybe
