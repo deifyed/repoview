@@ -1,0 +1,13 @@
+[Unit]
+Description=Push repository statuses to remote server
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+
+[Service]
+Type=oneshot
+ExecStart=${PREFIX}/${BINARY} push
+TimeoutSec=30
+Environment="SSH_AUTH_SOCK=${SSH_AUTH_SOCK}"
+
+[Install]
+WantedBy=multi-user.target

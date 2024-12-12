@@ -3,6 +3,7 @@ BINARY=repoview
 
 # Installation paths
 PREFIX ?= ${HOME}/.local/bin
+USER_SERVICE_PATH = ${HOME}/.config/systemd/user
 
 # Go related variables
 GOBASE=$(shell pwd)
@@ -26,6 +27,11 @@ install: build
 	@echo "Installing to $(PREFIX)..."
 	@mkdir -p $(PREFIX)
 	@cp $(GOBIN)/$(BINARY) $(PREFIX)/$(BINARY)
+
+.PHONY: install-service
+install-service:
+	@echo "Installing service..."
+	@cat repoview.service | SSH_AUTH_SOCK=${SSH_AUTH_SOCK} PREFIX=$(PREFIX) BINARY=$(BINARY) envsubst > $(USER_SERVICE_PATH)/repoview.service
 
 # Uninstall target
 .PHONY: uninstall
